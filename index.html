@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jordan Legislation Archive</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Jordan Legislation Archive</h1>
+        <button id="adminSignInButton" onclick="showSignIn()">Admin Sign In</button>
+        <button id="adminSignOutButton" style="display:none;" onclick="signOutAdmin()">Admin Sign Out</button>
+    </header>
+
+    <section id="signInSection" style="display:none;">
+        <h2>Admin Sign In</h2>
+        <form onsubmit="return signInAdmin()">
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <input type="submit" value="Sign In">
+            <p id="signInError" style="color:red; display:none;">Invalid credentials</p>
+        </form>
+    </section>
+
+    <section id="addLegislationSection" style="display:none;">
+        <h2>Add New Legislation</h2>
+        <form onsubmit="return addNewLegislation()">
+            <input type="text" id="legislationTitle" placeholder="Title" required>
+            <input type="number" id="legislationYear" placeholder="Year" required>
+            <input type="text" id="legislationCategory" placeholder="Category" required>
+            <input type="url" id="legislationLink" placeholder="PDF Link" required>
+            <input type="submit" value="Add">
+        </form>
+        <p id="addSuccessMessage" style="display:none;">Legislation added successfully!</p>
+    </section>
+
+    <section id="filterSection">
+        <h2>Filter Legislation</h2>
+        <select id="filterYear" onchange="filterLegislation()">
+            <option value="">Select Year</option>
+            <!-- Year options will be populated here -->
+        </select>
+        <select id="filterCategory" onchange="filterLegislation()">
+            <option value="">Select Category</option>
+            <!-- Category options will be populated here -->
+        </select>
+    </section>
+
+    <section id="searchSection">
+        <h2>Search Legislation</h2>
+        <input type="text" id="searchInput" oninput="searchLegislation()" placeholder="Search by title...">
+    </section>
+
+    <section id="legislationListSection">
+        <h2>Legislation List</h2>
+        <div id="legislationList"></div>
+        <div>
+            <button onclick="changePage(-1)">Previous</button>
+            <span id="pageNumber">Page 1</span>
+            <button onclick="changePage(1)">Next</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Jordan Legislation Archive</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
