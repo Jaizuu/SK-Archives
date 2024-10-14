@@ -40,36 +40,41 @@ function signOutAdmin() {
     loadLegislations(); // Reload legislations to hide delete buttons
 }
 
-// Load legislations from local storage
+// Load legislations from JSON file
 function loadLegislations() {
     const legislationList = document.getElementById('legislationList');
     const filterYear = document.getElementById('filterYear');
     const filterCategory = document.getElementById('filterCategory');
 
     legislationList.innerHTML = ''; // Clear current list
-    const legislations = JSON.parse(localStorage.getItem('legislations')) || [];
 
-    // Populate filter options
-    populateFilters(legislations);
+    // Fetch legislations from a JSON file (assume it's hosted on the same domain)
+    fetch('legislations.json')
+        .then(response => response.json())
+        .then(legislations => {
+            // Populate filter options
+            populateFilters(legislations);
 
-    // Sort legislations by year (latest first)
-    legislations.sort((a, b) => b.year - a.year);
+            // Sort legislations by year (latest first)
+            legislations.sort((a, b) => b.year - a.year);
 
-    legislations.forEach((legislation, index) => {
-        const newLegislationItem = document.createElement('div');
-        newLegislationItem.classList.add('legislation-item');
-        newLegislationItem.innerHTML = `
-            <h3>${legislation.title}</h3>
-            <p>Year: ${legislation.year} | Category: ${legislation.category}</p>
-            <a href="${legislation.link}" target="_blank">View PDF</a>
-            ${isAdmin ? `<button onclick="deleteLegislation('${legislation.title}')">Delete</button>` : ''}
-        `;
-        legislationList.appendChild(newLegislationItem);
-    });
+            legislations.forEach((legislation, index) => {
+                const newLegislationItem = document.createElement('div');
+                newLegislationItem.classList.add('legislation-item');
+                newLegislationItem.innerHTML = `
+                    <h3>${legislation.title}</h3>
+                    <p>Year: ${legislation.year} | Category: ${legislation.category}</p>
+                    <a href="${legislation.link}" target="_blank">View PDF</a>
+                    ${isAdmin ? `<button onclick="deleteLegislation('${legislation.title}')">Delete</button>` : ''}
+                `;
+                legislationList.appendChild(newLegislationItem);
+            });
 
-    // Reset pagination
-    currentPage = 1;
-    changePage(0); // Refresh to show first page
+            // Reset pagination
+            currentPage = 1;
+            changePage(0); // Refresh to show first page
+        })
+        .catch(error => console.error('Error loading legislations:', error));
 }
 
 // Populate filter options
@@ -108,17 +113,24 @@ function filterLegislation() {
     const legislationItems = document.getElementsByClassName('legislation-item');
 
     Array.from(legislationItems).forEach(item => {
-        const year = item.querySelector('p').innerText.match(/Year: (\d+)/)[1];
-        const category = item.querySelector('p').innerText.match(/Category: (.+)/)[1];
+        const year = item.querySelector('p').textContent.match(/Year: (\d+)/)[1];
+        const category = item.querySelector('p').textContent.match(/Category: (.+)/)[1];
 
-        const matchesYear = filterYearValue === '' || year === filterYearValue;
-        const matchesCategory = filterCategoryValue === '' || category === filterCategoryValue;
+        const matchesYear = filterYearValue ? year === filterYearValue : true;
+        const matchesCategory = filterCategoryValue ? category === filterCategoryValue : true;
 
-        if (matchesYear && matchesCategory) {
-            item.style.display = ''; // Show item if it matches filters
-        } else {
-            item.style.display = 'none'; // Hide item if it doesn't match
-        }
+        item.style.display = (matchesYear && matchesCategory) ? 'block' : 'none';
+    });
+}
+
+// Search legislation functionality
+function searchLegislation() {
+    const searchInputValue = document.getElementById('searchInput').value.toLowerCase();
+    const legislationItems = document.getElementsByClassName('legislation-item');
+
+    Array.from(legislationItems).forEach(item => {
+        const title = item.querySelector('h3').textContent.toLowerCase();
+        item.style.display = title.includes(searchInputValue) ? 'block' : 'none';
     });
 }
 
@@ -129,81 +141,57 @@ function addNewLegislation() {
     const category = document.getElementById('legislationCategory').value;
     const link = document.getElementById('legislationLink').value;
 
-    const legislations = JSON.parse(localStorage.getItem('legislations')) || [];
-
-    // Create new legislation object
-    const newLegislation = { title, year, category, link };
-    legislations.push(newLegislation);
-    
-    // Save updated legislations to local storage
-    localStorage.setItem('legislations', JSON.stringify(legislations));
-
-    // Load updated legislations
-    loadLegislations();
-
-    // Clear form fields
-    document.getElementById('legislationTitle').value = '';
-    document.getElementById('legislationYear').value = '';
-    document.getElementById('legislationCategory').value = '';
-    document.getElementById('legislationLink').value = '';
-
-    document.getElementById('addSuccessMessage').style.display = 'block';
-    setTimeout(() => {
-        document.getElementById('addSuccessMessage').style.display = 'none';
-    }, 2000);
+    // Assume we POST to a server
+    fetch('legislations.json', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ title, year, category, link })
+    })
+    .then(response => {
+        if (response.ok) {
+            document.getElementById('addSuccessMessage').style.display = 'block';
+            document.getElementById('legislationTitle').value = '';
+            document.getElementById('legislationYear').value = '';
+            document.getElementById('legislationCategory').value = '';
+            document.getElementById('legislationLink').value = '';
+            loadLegislations(); // Reload legislations after adding
+        }
+    })
+    .catch(error => console.error('Error adding legislation:', error));
 
     return false; // Prevent form submission
 }
 
 // Delete legislation functionality
 function deleteLegislation(title) {
-    if (confirm(`Are you sure you want to delete "${title}"?`)) {
-        let legislations = JSON.parse(localStorage.getItem('legislations')) || [];
-        legislations = legislations.filter(leg => leg.title !== title);
-        localStorage.setItem('legislations', JSON.stringify(legislations));
-        loadLegislations(); // Refresh legislation list
-    }
+    // Here you would send a DELETE request to the server
+    console.log(`Delete legislation: ${title}`);
+    loadLegislations(); // Reload legislations after deletion
 }
 
-// Search legislation functionality
-function searchLegislation() {
-    const searchValue = document.getElementById('searchInput').value.toLowerCase();
-    const legislationItems = document.getElementsByClassName('legislation-item');
-
-    Array.from(legislationItems).forEach(item => {
-        const title = item.querySelector('h3').innerText.toLowerCase();
-        if (title.includes(searchValue)) {
-            item.style.display = ''; // Show item if it matches search
-        } else {
-            item.style.display = 'none'; // Hide item if it doesn't match
-        }
-    });
-}
-
-// Pagination functionality
+// Pagination variables
 let currentPage = 1;
-const itemsPerPage = 5; // Adjust number of items per page
+const itemsPerPage = 5; // Set how many items to show per page
 
 function changePage(direction) {
-    const legislationItems = Array.from(document.getElementsByClassName('legislation-item'));
+    const legislationItems = document.getElementsByClassName('legislation-item');
     const totalItems = legislationItems.length;
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    // Update current page based on direction
     currentPage += direction;
+
     if (currentPage < 1) currentPage = 1;
     if (currentPage > totalPages) currentPage = totalPages;
 
-    // Show only items for the current page
-    legislationItems.forEach((item, index) => {
-        if (index >= (currentPage - 1) * itemsPerPage && index < currentPage * itemsPerPage) {
-            item.style.display = '';
-        } else {
-            item.style.display = 'none';
-        }
-    });
+    document.getElementById('pageNumber').textContent = `Page ${currentPage}`;
 
-    document.getElementById('pageNumber').innerText = `Page ${currentPage}`;
+    Array.from(legislationItems).forEach((item, index) => {
+        const start = (currentPage - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        item.style.display = (index >= start && index < end) ? 'block' : 'none';
+    });
 }
 
 // Initial load
