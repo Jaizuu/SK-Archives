@@ -1,6 +1,6 @@
 // Google Drive API variables
-const API_KEY = 'YOUR_GOOGLE_DRIVE_API_KEY';
-const FOLDER_ID = 'YOUR_GOOGLE_DRIVE_FOLDER_ID';
+const API_KEY = 'AIzaSyCwN6epkbxf69AvPD-SdPFrB0MONjFAI1Q';
+const FOLDER_ID = '1D-gIDGeHx2frRjH7j5wIScQDTJWzeW7e';
 
 // Load legislations from Google Drive
 async function loadLegislations() {
