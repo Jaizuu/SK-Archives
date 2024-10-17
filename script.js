@@ -65,12 +65,15 @@ function applyFilters() {
 
     const cards = document.querySelectorAll('.legislation-card');
     cards.forEach(card => {
-        const title = card.querySelector('h2').textContent.toLowerCase();
         const yearText = card.querySelector('p:nth-child(2)').textContent; // Year text
         const categoryText = card.querySelector('p:nth-child(3)').textContent; // Category text
+        const categoryValue = categoryText.split(': ')[1]; // Get only the category name
 
+        // Create a match for category using exact comparison
         const yearMatch = year ? yearText.includes(year) : true;
-        const categoryMatch = category ? categoryText.includes(category) : true;
+        const categoryMatch = category ? categoryValue === category : true; // Exact match for category
+
+        console.log(`Filtering: Year Match: ${yearMatch}, Category Match: ${categoryMatch}, Year: ${yearText}, Category: ${categoryValue}`);
 
         card.style.display = yearMatch && categoryMatch ? 'block' : 'none';
     });
