@@ -18,12 +18,15 @@ async function loadLegislations() {
     yearFilter.innerHTML = '<option value="">Select Year</option>';
 
     data.files.forEach(file => {
-        // Assume the year is part of the file name (you can adjust this based on your actual file naming convention)
-        const fileYear = new Date(file.createdTime).getFullYear();
-        const fileCategory = categorizeFile(file.name); // Function to categorize based on file name or other logic
-        
+        const fileName = file.name;
+
+        // Extract the year from the file name
+        const yearMatch = fileName.match(/\b\d{4}\b/); // Matches a 4-digit year
+        const fileYear = yearMatch ? yearMatch[0] : 'Unknown Year'; // Fallback if no year found
+        const fileCategory = categorizeFile(fileName);
+
         // Store legislation information
-        legislations.push({ id: file.id, name: file.name, year: fileYear, category: fileCategory });
+        legislations.push({ id: file.id, name: fileName, year: fileYear, category: fileCategory });
 
         // Add unique years to the year filter
         if (![...yearFilter.options].some(option => option.value == fileYear)) {
@@ -37,7 +40,7 @@ async function loadLegislations() {
         const legislationCard = document.createElement('div');
         legislationCard.className = 'legislation-card';
         legislationCard.innerHTML = `
-            <h2>${file.name}</h2>
+            <h2>${fileName}</h2>
             <p>Year: ${fileYear}</p>
             <p>Category: ${fileCategory}</p>
             <a href="https://drive.google.com/file/d/${file.id}/view" target="_blank">View Legislation</a>
@@ -48,9 +51,10 @@ async function loadLegislations() {
 
 // Categorize file based on its name
 function categorizeFile(fileName) {
-    if (fileName.includes('Resolution')) return 'Resolution';
-    if (fileName.includes('Ordinance')) return 'Ordinance';
-    if (fileName.includes('Appropriation Ordinance')) return 'Appropriation Ordinance';
+    const lowerCaseFileName = fileName.toLowerCase(); // Normalize to lower case for matching
+    if (lowerCaseFileName.includes('appropriation ordinance')) return 'Appropriation Ordinance';
+    if (lowerCaseFileName.includes('resolution')) return 'Resolution';
+    if (lowerCaseFileName.includes('ordinance')) return 'Ordinance';
     return 'Other'; // Default category if none matches
 }
 
@@ -62,9 +66,12 @@ function applyFilters() {
     const cards = document.querySelectorAll('.legislation-card');
     cards.forEach(card => {
         const title = card.querySelector('h2').textContent.toLowerCase();
-        const yearMatch = year ? card.querySelector('p').textContent.includes(year) : true;
-        const categoryMatch = category ? card.querySelector('p:nth-child(2)').textContent.includes(category) : true;
-        
+        const yearText = card.querySelector('p:nth-child(2)').textContent; // Year text
+        const categoryText = card.querySelector('p:nth-child(3)').textContent; // Category text
+
+        const yearMatch = year ? yearText.includes(year) : true;
+        const categoryMatch = category ? categoryText.includes(category) : true;
+
         card.style.display = yearMatch && categoryMatch ? 'block' : 'none';
     });
 }
