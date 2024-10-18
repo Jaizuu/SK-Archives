@@ -5,31 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jordan Legislation Archive</title>
     <link rel="stylesheet" href="styles.css">
+    <!-- Link to Google Fonts for Poppins -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <header>
-        <h1>Jordan Legislation Archive</h1>
-        <div id="search-bar">
-            <input type="text" id="search-input" placeholder="Search for legislations..." />
-        </div>
-    </header>
-    <main>
-        <div id="filters">
-            <select id="year-filter">
-                <option value="">Select Year</option>
-                <!-- Add year options dynamically with JavaScript -->
-            </select>
-            <select id="category-filter">
-                <option value="">Select Category</option>
-                <option value="Resolution">Resolution</option>
-                <option value="Ordinance">Ordinance</option>
-                <option value="Appropriation Ordinance">Appropriation Ordinance</option>
-            </select>
-        </div>        
-        <section id="legislation-list">
-            <!-- Dynamic content from Google Drive will be displayed here -->
-        </section>
-    </main>
+    <div class="container">
+        <header>
+            <img src="assets/jordan-logo.png" alt="Jordan Legislation Archive Logo" class="logo">
+            <h1>Jordan Legislation Archive</h1>
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Search legislation...">
+            </div>
+        </header>
+        <main>
+            <div id="filters">
+                <section class="filters">
+                    <select id="category-filter">
+                        <option value="">Category</option>
+                        <option value="Resolution">Resolution</option>
+                        <option value="Ordinance">Ordinance</option>
+                        <option value="Appropriation Ordinance">Appropriation Ordinance</option>
+                    </select>
+                    <select id="year-filter">
+                        <option value="">Year</option>
+                    </select>
+                </section>
+            
+                <section class="legislation-list" id="legislation-list">
+                    <!-- Legislation cards will be loaded here -->
+                </section>
+            </div>
+        </main>
+    </div>
+    <!-- Loading spinner -->
+<div id="loading-spinner" style="display: none;">
+    <div class="spinner"></div>
+</div>
     <script src="script.js"></script>
 </body>
 </html>
