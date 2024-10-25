@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return { category, year: year || "Unknown" };
     }
 
-    // Function to render documents
+    // Function to render documents with enhanced card design
     function renderDocuments() {
         const searchQuery = searchBar.value.toLowerCase();
         const selectedCategory = categoryFilter.value;
@@ -83,12 +83,20 @@ document.addEventListener("DOMContentLoaded", function () {
         filteredDocuments.forEach(doc => {
             const card = document.createElement('div');
             card.className = 'document-card';
+
+            // Enhanced card content
             card.innerHTML = `
-                <h3>${doc.title}</h3>
-                <p>Category: ${doc.category}</p>
-                <p>Year: ${doc.year}</p>
-                <a href="${doc.link}" class="preview-btn" target="_blank">Preview</a>
+                <h4>${doc.title}</h4>
+                <div class="metadata">
+                    <div>
+                        <i class="fas fa-file-pdf document-icon"></i>
+                        <span>${doc.category}</span>
+                    </div>
+                    <div>${doc.year}</div>
+                </div>
+                <a href="${doc.link}" class="view-button" target="_blank">View Document</a>
             `;
+
             documentGrid.appendChild(card);
         });
 
