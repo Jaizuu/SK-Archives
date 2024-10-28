@@ -8,8 +8,11 @@ document.addEventListener("DOMContentLoaded", function () {
     const yearFilter = document.getElementById('yearFilter');
     const sortFilter = document.getElementById('sortFilter');
     const loadingIndicator = document.getElementById('loadingIndicator');
+    const paginationContainer = document.getElementById('pagination'); // Added pagination container
 
     let documents = []; // Store fetched documents here
+    let currentPage = 1;
+    const itemsPerPage = 10; // Number of documents to display per page
 
     // Fetch documents from Google Drive
     async function fetchDocuments() {
@@ -57,7 +60,7 @@ document.addEventListener("DOMContentLoaded", function () {
         return { category, year: year || "Unknown" };
     }
 
-    // Function to render documents with enhanced card design
+    // Function to render documents with pagination
     function renderDocuments() {
         const searchQuery = searchBar.value.toLowerCase();
         const selectedCategory = categoryFilter.value;
@@ -79,8 +82,14 @@ document.addEventListener("DOMContentLoaded", function () {
             filteredDocuments.sort((a, b) => a.title.localeCompare(b.title));
         }
 
+        // Calculate pagination
+        const totalPages = Math.ceil(filteredDocuments.length / itemsPerPage);
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const paginatedDocuments = filteredDocuments.slice(startIndex, endIndex);
+
         documentGrid.innerHTML = "";
-        filteredDocuments.forEach(doc => {
+        paginatedDocuments.forEach(doc => {
             const card = document.createElement('div');
             card.className = 'document-card';
 
@@ -101,8 +110,27 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
         // Retain selected year and category after filtering
-        categoryFilter.value = selectedCategory; // This retains the selected category
-        yearFilter.value = selectedYear; // This retains the selected year
+        categoryFilter.value = selectedCategory;
+        yearFilter.value = selectedYear;
+
+        renderPagination(totalPages);
+    }
+
+    // Function to render pagination controls
+    function renderPagination(totalPages) {
+        paginationContainer.innerHTML = '';
+
+        for (let page = 1; page <= totalPages; page++) {
+            const pageButton = document.createElement('button');
+            pageButton.textContent = page;
+            pageButton.className = 'pagination-button';
+            if (page === currentPage) pageButton.classList.add('active');
+            pageButton.addEventListener('click', () => {
+                currentPage = page;
+                renderDocuments();
+            });
+            paginationContainer.appendChild(pageButton);
+        }
     }
 
     // Function to populate the year filter with unique years
@@ -115,11 +143,29 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
+    // Scroll to the Document Section when Search Bar is clicked
+    searchBar.addEventListener('click', function () {
+        const documentSection = document.getElementById('documentGrid');
+        documentSection.scrollIntoView({ behavior: 'smooth' });
+    });
+
     // Event Listeners
-    searchBar.addEventListener('input', renderDocuments);
-    categoryFilter.addEventListener('change', renderDocuments);
-    yearFilter.addEventListener('change', renderDocuments);
-    sortFilter.addEventListener('change', renderDocuments);
+    searchBar.addEventListener('input', () => {
+        currentPage = 1; // Reset to first page on search
+        renderDocuments();
+    });
+    categoryFilter.addEventListener('change', () => {
+        currentPage = 1; // Reset to first page on category change
+        renderDocuments();
+    });
+    yearFilter.addEventListener('change', () => {
+        currentPage = 1; // Reset to first page on year change
+        renderDocuments();
+    });
+    sortFilter.addEventListener('change', () => {
+        currentPage = 1; // Reset to first page on sort change
+        renderDocuments();
+    });
 
     // Initial Fetch
     fetchDocuments();

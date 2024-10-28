@@ -19,6 +19,7 @@
                     <h1>Legislation Archive</h1>
                 </div>
             </div>
+            <!-- Search Container (remains visible) -->
             <div class="search-container">
                 <div class="search-bar-wrapper">
                     <i class="fas fa-search search-icon"></i>
@@ -76,72 +77,74 @@
         </div>
     </section>
 
+    <div id="pagination" class="pagination-container"></div>
+
     <!-- Improved About Section -->
-<section id="about" class="about-section">
-    <div class="about-container">
-        <!-- Two-Column Layout -->
-        <div class="about-content">
-            <!-- Visuals Column -->
-            <div class="about-visuals">
-                <!-- Replace the src values with your own image paths if needed -->
-                <img src="assets/map.png" alt="Map of Jordan" class="about-image">
-                <div class="about-icons">
-                    <div class="icon-feature">
-                        <i class="fas fa-balance-scale"></i>
-                        <p>Transparency</p>
-                    </div>
-                    <div class="icon-feature">
-                        <i class="fas fa-book-open"></i>
-                        <p>Accessibility</p>
-                    </div>
-                    <div class="icon-feature">
-                        <i class="fas fa-history"></i>
-                        <p>Historical Records</p>
+    <section id="about" class="about-section">
+        <div class="about-container">
+            <!-- Two-Column Layout -->
+            <div class="about-content">
+                <!-- Visuals Column -->
+                <div class="about-visuals">
+                    <!-- Replace the src values with your own image paths if needed -->
+                    <img src="assets/map.png" alt="Map of Jordan" class="about-image">
+                    <div class="about-icons">
+                        <div class="icon-feature">
+                            <i class="fas fa-balance-scale"></i>
+                            <p>Transparency</p>
+                        </div>
+                        <div class="icon-feature">
+                            <i class="fas fa-book-open"></i>
+                            <p>Accessibility</p>
+                        </div>
+                        <div class="icon-feature">
+                            <i class="fas fa-history"></i>
+                            <p>Historical Records</p>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Text Content Column -->
-            <div class="about-text">
-                <h3>About the Legislation Archive</h3>
-                <p>
-                    The Jordan Legislation Archive is a comprehensive digital collection of Jordan's laws, resolutions, and ordinances. This platform is designed to make legal information accessible to the public, ensuring transparency and accountability.
-                </p>
-                
-                <h4>Our Mission</h4>
-                <p>
-                    Our mission is to provide easy access to Jordan's legislative records, empowering citizens and officials with accurate and up-to-date legal information.
-                </p>
-                
-                <h4>Key Features</h4>
-                <ul>
-                    <li><strong>Searchable Database:</strong> Quickly find specific documents using search and filter options.</li>
-                    <li><strong>Accessible Format:</strong> Browse documents with a user-friendly interface.</li>
-                    <li><strong>Real-Time Updates:</strong> Documents are updated directly from the official records.</li>
-                </ul>
+                <!-- Text Content Column -->
+                <div class="about-text">
+                    <h3>About the Legislation Archive</h3>
+                    <p>
+                        The Jordan Legislation Archive is a comprehensive digital collection of Jordan's laws, resolutions, and ordinances. This platform is designed to make legal information accessible to the public, ensuring transparency and accountability.
+                    </p>
+                    
+                    <h4>Our Mission</h4>
+                    <p>
+                        Our mission is to provide easy access to Jordan's legislative records, empowering citizens and officials with accurate and up-to-date legal information.
+                    </p>
+                    
+                    <h4>Key Features</h4>
+                    <ul>
+                        <li><strong>Searchable Database:</strong> Quickly find specific documents using search and filter options.</li>
+                        <li><strong>Accessible Format:</strong> Browse documents with a user-friendly interface.</li>
+                        <li><strong>Real-Time Updates:</strong> Documents are updated directly from the official records.</li>
+                    </ul>
 
-                <!-- Call to Action Button -->
-                <button class="cta-button" onclick="document.getElementById('documentGrid').scrollIntoView({ behavior: 'smooth' });">
-                    Explore the Archive
-                </button>
+                    <!-- Call to Action Button -->
+                    <button class="cta-button" onclick="document.getElementById('documentGrid').scrollIntoView({ behavior: 'smooth' });">
+                        Explore the Archive
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
     <!-- Improved Footer -->
-<footer class="footer">
-    <div class="footer-container">
-        <!-- Footer Columns -->
-        <div class="footer-columns">
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Footer Columns -->
+            <div class="footer-columns">
 
-            <!-- Contact Column -->
-            <div class="footer-column">
-                <h4>Contact Us</h4>
-                <p><i class="fas fa-envelope"></i> info@jordanlegislationarchive.com</p>
-                <p><i class="fas fa-phone-alt"></i> +962 6 1234 5678</p>
-                <p><i class="fas fa-map-marker-alt"></i> Jordan, Guimaras</p>
-            </div>
+                <!-- Contact Column -->
+                <div class="footer-column">
+                    <h4>Contact Us</h4>
+                    <p><i class="fas fa-envelope"></i> info@jordanlegislationarchive.com</p>
+                    <p><i class="fas fa-phone-alt"></i> +962 6 1234 5678</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Jordan, Guimaras</p>
+                </div>
 
                 <!-- Social Media Icons -->
                 <div class="social-media-icons">
@@ -157,8 +160,7 @@
         <div class="footer-bottom">
             <p>&copy; 2024 Jordan Legislation Archive. All Rights Reserved.</p>
         </div>
-    </div>
-</footer>
+    </footer>
 
     <script src="script.js"></script>
 </body>
