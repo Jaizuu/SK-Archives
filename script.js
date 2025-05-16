@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
     const API_KEY = 'AIzaSyCwN6epkbxf69AvPD-SdPFrB0MONjFAI1Q';
-    const FOLDER_ID = '1D-gIDGeHx2frRjH7j5wIScQDTJWzeW7e';
+    const FOLDER_ID = '1xBsSt_Oh-ZagwV8AKv3ed8GTSLkS8gSI';
 
     const documentGrid = document.getElementById('documentGrid');
     const searchBar = document.getElementById('searchBar');
